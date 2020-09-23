@@ -71,7 +71,7 @@ class UserServiceTest {
         AddPlaceDto addPlaceDto =new AddPlaceDto();
         addPlaceDto.setFavouritePlaces(POINAME);
         userService.savePlace(user.getId(), addPlaceDto);
-        poi = poiRepository.findByName(POINAME);
+        POI poi = poiRepository.findByName(POINAME);
         user = userRepository.findByLogin(LOGIN);
 
         assertThat(user.getPois().contains(poi));
