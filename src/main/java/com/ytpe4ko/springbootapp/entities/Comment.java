@@ -1,5 +1,6 @@
 package com.ytpe4ko.springbootapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Min(0)
@@ -36,7 +37,9 @@ public class Comment {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "poi_id")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "poi_id", nullable = false)
+    @JsonIgnore
     private POI poi;
 }

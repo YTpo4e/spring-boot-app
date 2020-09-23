@@ -1,14 +1,18 @@
 package com.ytpe4ko.springbootapp.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,10 +43,11 @@ public class POI {
     @Column(name = "rating")
     private Float rating;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "favourite_places",
-            joinColumns = @JoinColumn(name = "poi_id"),
-            inverseJoinColumns = @JoinColumn(name = "users_id"))
+    @OneToMany(mappedBy = "poi", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Comment> comments = new HashSet<>();
+
+    @ManyToMany(mappedBy = "pois", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<User> users;
 
     public POI(String name, TypeOfPlace typeOfPlace, City city, String address, Float rating, User user) {
@@ -51,5 +56,22 @@ public class POI {
         this.city = city;
         this.address = address;
         this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        POI poi = (POI) o;
+        return id.equals(poi.id) &&
+                name.equals(poi.name) &&
+                Objects.equals(typeOfPlace, poi.typeOfPlace) &&
+                Objects.equals(city, poi.city) &&
+                address.equals(poi.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, typeOfPlace, city, address);
     }
 }

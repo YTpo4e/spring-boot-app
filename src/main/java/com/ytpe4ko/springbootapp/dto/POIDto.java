@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 public class POIDto {
 
     private String name;
-    private Long typeOfPlace;
-    private Long city;
+    private String typeOfPlace;
+    private String city;
     private String address;
     private Float rating;
 }
