@@ -3,8 +3,6 @@ package com.ytpe4ko.springbootapp.dto;
 import com.ytpe4ko.springbootapp.entities.Comment;
 import lombok.Data;
 
-import java.awt.geom.FlatteningPathIterator;
-
 @Data
 public class CommentDto {
     private String text;

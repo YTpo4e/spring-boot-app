@@ -8,10 +8,8 @@ import com.ytpe4ko.springbootapp.repositories.CommentRepository;
 import com.ytpe4ko.springbootapp.repositories.POIRepository;
 import com.ytpe4ko.springbootapp.repositories.TOPRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,12 +48,17 @@ public class PoiService {
     public ResponseEntity deleteComment(Long poiId, Long commentId) {
         try {
             POI poi = poiRepository.findById(poiId).get();
-            Long countComment = commentRepository.countByPoiId(commentId);
+            Long countComment = commentRepository.countByPoiId(poiId);
             Comment comment = commentRepository.findById(commentId).get();
-            float rating = (poi.getRating() * countComment - comment.getRating()) / (countComment - 1);
-            commentRepository.delete(comment);
+            float rating;
+            if (countComment != 1) {
+                rating = (poi.getRating() * countComment - comment.getRating()) / (countComment - 1);
+            } else {
+                rating = 0f;
+            }
             poi.setRating(rating);
             poiRepository.save(poi);
+            commentRepository.deleteById(comment.getId());
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

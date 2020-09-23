@@ -76,7 +76,7 @@ public class POIController {
     }
 
     @DeleteMapping("/poi/{id}/comments{id1}")
-    public ResponseEntity deleteComment(@PathVariable Long id, @PathVariable Long id1, @AuthenticationPrincipal User user){
+    public ResponseEntity deleteComment(@PathVariable Long id, @PathVariable Long id1, @AuthenticationPrincipal User user) {
         return poiService.deleteComment(id, id1);
     }
 }

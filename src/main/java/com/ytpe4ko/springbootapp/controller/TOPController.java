@@ -1,8 +1,6 @@
 package com.ytpe4ko.springbootapp.controller;
 
-import com.ytpe4ko.springbootapp.entities.City;
 import com.ytpe4ko.springbootapp.entities.TypeOfPlace;
-import com.ytpe4ko.springbootapp.repositories.CityRepository;
 import com.ytpe4ko.springbootapp.repositories.TOPRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

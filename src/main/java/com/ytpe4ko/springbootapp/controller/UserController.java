@@ -1,8 +1,8 @@
 package com.ytpe4ko.springbootapp.controller;
 
 
-import com.ytpe4ko.springbootapp.dto.RegistrationForm;
 import com.ytpe4ko.springbootapp.dto.AddPlaceDto;
+import com.ytpe4ko.springbootapp.dto.RegistrationForm;
 import com.ytpe4ko.springbootapp.entities.POI;
 import com.ytpe4ko.springbootapp.entities.User;
 import com.ytpe4ko.springbootapp.service.UserService;

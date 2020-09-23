@@ -11,8 +11,11 @@ import java.util.List;
 @Repository
 public interface POIRepository extends JpaRepository<POI, Long> {
     POI findByName(String name);
+
     POI deleteByName(String name);
+
     void deleteById(Long id);
+
 
     @Query("select comments from POI p where p.id = ?1")
     List<Comment> getCommentsByPOI(Long id);

@@ -6,14 +6,13 @@ import com.ytpe4ko.springbootapp.entities.POI;
 import com.ytpe4ko.springbootapp.entities.User;
 import com.ytpe4ko.springbootapp.repositories.POIRepository;
 import com.ytpe4ko.springbootapp.repositories.UserRepository;
-import org.aspectj.lang.annotation.After;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Arrays;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +38,7 @@ class UserServiceTest {
     private POIRepository poiRepository;
 
     @BeforeEach
-    public  void inti() {
+    public void inti() {
         POI poi = new POI();
         poi.setName(POINAME);
         poi.setAddress(POIADDERESS);
@@ -68,7 +67,7 @@ class UserServiceTest {
     @Test
     void savePlace() {
         User user = userRepository.findByLogin(LOGIN);
-        AddPlaceDto addPlaceDto =new AddPlaceDto();
+        AddPlaceDto addPlaceDto = new AddPlaceDto();
         addPlaceDto.setFavouritePlaces(POINAME);
         userService.savePlace(user.getId(), addPlaceDto);
         POI poi = poiRepository.findByName(POINAME);

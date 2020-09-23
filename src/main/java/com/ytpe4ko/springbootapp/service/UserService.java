@@ -1,7 +1,7 @@
 package com.ytpe4ko.springbootapp.service;
 
-import com.ytpe4ko.springbootapp.dto.RegistrationForm;
 import com.ytpe4ko.springbootapp.dto.AddPlaceDto;
+import com.ytpe4ko.springbootapp.dto.RegistrationForm;
 import com.ytpe4ko.springbootapp.entities.POI;
 import com.ytpe4ko.springbootapp.entities.User;
 import com.ytpe4ko.springbootapp.repositories.POIRepository;
@@ -9,7 +9,6 @@ import com.ytpe4ko.springbootapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

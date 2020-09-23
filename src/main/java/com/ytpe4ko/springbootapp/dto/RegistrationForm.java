@@ -5,7 +5,6 @@ import com.ytpe4ko.springbootapp.entities.Role;
 import com.ytpe4ko.springbootapp.entities.User;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.Collections;
 
 @Data

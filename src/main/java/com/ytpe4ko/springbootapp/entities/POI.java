@@ -2,7 +2,10 @@ package com.ytpe4ko.springbootapp.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -43,10 +46,10 @@ public class POI {
     @Column(name = "rating")
     private Float rating;
 
-    @OneToMany(mappedBy = "poi", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "poi", fetch = FetchType.EAGER)
     private Set<Comment> comments = new HashSet<>();
 
-    @ManyToMany(mappedBy = "pois", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "pois", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<User> users;
 
@@ -74,4 +77,6 @@ public class POI {
     public int hashCode() {
         return Objects.hash(id, name, typeOfPlace, city, address);
     }
+
+
 }
