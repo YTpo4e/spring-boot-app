@@ -1,6 +1,5 @@
 package com.ytpe4ko.springbootapp.service;
 
-import com.ytpe4ko.springbootapp.dto.CommentDto;
 import com.ytpe4ko.springbootapp.entities.Comment;
 import com.ytpe4ko.springbootapp.entities.POI;
 import com.ytpe4ko.springbootapp.entities.User;
@@ -8,7 +7,8 @@ import com.ytpe4ko.springbootapp.repositories.POIRepository;
 import com.ytpe4ko.springbootapp.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class PoiServiceTest {
 
-    @Autowired
+    @Mock
     private PoiService poiService;
-    @Autowired
+    @InjectMocks
     private UserRepository userRepository;
 
-    @Autowired
+    @Mock
     private POIRepository poiRepository;
 
     private static Long USERID = 156L;
@@ -36,17 +36,17 @@ class PoiServiceTest {
     @Test
     void addComment() {
         User user = userRepository.getOne(USERID);
-        CommentDto commentDto = new CommentDto();
-        commentDto.setRating(4f);
-        commentDto.setText("good");
-        poiService.addComment(user, commentDto, POIID);
+        Comment comment = new Comment();
+        comment.setRating(4f);
+        comment.setText("good");
+        poiService.addComment(user, comment, POIID);
 
         List<Comment> comments = poiService.getCommentsByPOI(POIID);
         assertEquals(comments.size(), 1);
-        CommentDto commentDto1 = new CommentDto();
-        commentDto.setRating(4.4f);
-        commentDto.setText("good");
-        poiService.addComment(user, commentDto, POIID);
+        Comment comment1 = new Comment();
+        comment.setRating(4.4f);
+        comment.setText("good");
+        poiService.addComment(user, comment, POIID);
         comments = poiService.getCommentsByPOI(POIID);
         assertEquals(comments.size(), 2);
 

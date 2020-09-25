@@ -7,7 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 @Data
 public class AddPlaceDto {
-
     private String favouritePlaces;
-
 }

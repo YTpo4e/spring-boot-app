@@ -1,6 +1,5 @@
 package com.ytpe4ko.springbootapp.service;
 
-import com.ytpe4ko.springbootapp.dto.CommentDto;
 import com.ytpe4ko.springbootapp.dto.POIDto;
 import com.ytpe4ko.springbootapp.entities.*;
 import com.ytpe4ko.springbootapp.repositories.CityRepository;
@@ -10,6 +9,7 @@ import com.ytpe4ko.springbootapp.repositories.TOPRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,11 +29,10 @@ public class PoiService {
     @Autowired
     private POIRepository poiRepository;
 
-    public ResponseEntity addComment(User user, CommentDto dto, Long poiId) {
+    public ResponseEntity addComment(User user, Comment comment, Long poiId) {
         try {
             POI poi = poiRepository.findById(poiId).get();
-            float rating = (dto.getRating() + poi.getRating()) / (commentRepository.countByPoiId(poiId) + 1);
-            Comment comment = dto.toComment();
+            float rating = (comment.getRating() + poi.getRating()) / (commentRepository.countByPoiId(poiId) + 1);
             comment.setUser(user);
             comment.setPoi(poi);
             poi.setRating(rating);
@@ -69,27 +68,31 @@ public class PoiService {
         return poiRepository.getCommentsByPOI(id);
     }
 
-    public void savePOI(POIDto poiDto) {
+    public POI savePOI(POIDto poiDto) {
         City city = cityRepository.findByName(poiDto.getCity());
         TypeOfPlace typeOfPlace = topRepository.findByName(poiDto.getTypeOfPlace());
         POI poi = new POI(poiDto.getName(), typeOfPlace, city, poiDto.getAddress(), poiDto.getRating(), null);
-        poiRepository.save(poi);
+        return poiRepository.save(poi);
     }
 
-    public ResponseEntity updatePoi(POIDto poiDto, Long id) {
+    public ResponseEntity updatePoi(User user, POIDto poiDto, Long id) {
         City city = cityRepository.findByName(poiDto.getCity());
         TypeOfPlace typeOfPlace = topRepository.findByName(poiDto.getTypeOfPlace());
-        try {
-            POI poi = poiRepository.getOne(id);
-            poi.setCity(city);
-            poi.setTypeOfPlace(typeOfPlace);
-            poi.setRating(poiDto.getRating());
-            poi.setName(poiDto.getName());
-            poi.setAddress(poiDto.getAddress());
-            poiRepository.save(poi);
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+        if (user.getAuthorities().stream().anyMatch(r -> ((GrantedAuthority) r).getAuthority().equals(Role.ADMIN))) {
+            try {
+                POI poi = poiRepository.getOne(id);
+                poi.setCity(city);
+                poi.setTypeOfPlace(typeOfPlace);
+                poi.setRating(poiDto.getRating());
+                poi.setName(poiDto.getName());
+                poi.setAddress(poiDto.getAddress());
+                poiRepository.save(poi);
+                return new ResponseEntity(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+            }
+        } else {
+           return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

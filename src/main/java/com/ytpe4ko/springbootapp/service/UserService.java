@@ -29,6 +29,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     private POIRepository poiRepositor;
 
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
     public User create(RegistrationForm form) {
         User user = form.toUser();
         user.setPassword(cryptPasswordEncoder.encode(user.getPassword()));
@@ -37,15 +41,15 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public ResponseEntity<String> savePlace(Long id, AddPlaceDto addPlaceDto) {
+    public ResponseEntity<User> savePlace(Long id, AddPlaceDto addPlaceDto) {
         try {
             User user = userRepository.getOne(id);
             POI poi = poiRepositor.findByName(addPlaceDto.getFavouritePlaces());
             user.addPoi(poi);
             userRepository.save(user);
-            return new ResponseEntity<>("place add", HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("place not found", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

@@ -11,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -34,7 +35,7 @@ public class Comment {
     private LocalDateTime localDateTime = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "users_id",nullable = false)
     private User user;
 
 
@@ -42,4 +43,19 @@ public class Comment {
     @JoinColumn(name = "poi_id", nullable = false)
     @JsonIgnore
     private POI poi;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(rating, comment.rating) &&
+                Objects.equals(text, comment.text) &&
+                Objects.equals(localDateTime, comment.localDateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rating, text, localDateTime);
+    }
 }
