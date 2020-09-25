@@ -92,7 +92,7 @@ public class PoiService {
                 return new ResponseEntity(HttpStatus.NOT_MODIFIED);
             }
         } else {
-           return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

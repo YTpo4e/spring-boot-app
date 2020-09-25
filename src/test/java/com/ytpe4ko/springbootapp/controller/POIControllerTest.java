@@ -60,7 +60,6 @@ class POIControllerTest {
         c2.setRating(4.4f);
 
 
-
         List<Comment> comments = new ArrayList<>(Arrays.asList(c1, c2));
 
         Mockito.when(poiService.getCommentsByPOI(1L)).thenReturn(comments);

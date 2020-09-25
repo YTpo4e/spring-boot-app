@@ -35,7 +35,7 @@ public class Comment {
     private LocalDateTime localDateTime = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "users_id",nullable = false)
+    @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
 
