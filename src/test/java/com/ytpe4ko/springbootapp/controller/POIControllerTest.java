@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ytpe4ko.springbootapp.dto.POIDto;
 import com.ytpe4ko.springbootapp.entities.Comment;
 import com.ytpe4ko.springbootapp.entities.POI;
+import com.ytpe4ko.springbootapp.entities.Role;
 import com.ytpe4ko.springbootapp.entities.User;
 import com.ytpe4ko.springbootapp.repositories.POIRepository;
 import com.ytpe4ko.springbootapp.service.PoiService;
@@ -14,17 +15,21 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -43,8 +48,11 @@ class POIControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new POIController(poiRepository, poiService))
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new POIController(poiRepository, poiService))
+                .setControllerAdvice(putAuthenticationPrincipal)
                 .build();
+
     }
 
     @Test
@@ -208,4 +216,25 @@ class POIControllerTest {
                 .andExpect(status().isOk());
 
     }
+
+    private HandlerMethodArgumentResolver putAuthenticationPrincipal = new HandlerMethodArgumentResolver() {
+        @Override
+        public boolean supportsParameter(MethodParameter parameter) {
+            return parameter.getParameterType().isAssignableFrom(User.class);
+        }
+
+        @Override
+        public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+            User user = new User();
+            user.setRoles(Collections.singleton(Role.USER));
+            user.setId(1L);
+            user.setLogin("test");
+            user.setPassword("yyy");
+            user.setEmail("tttt@gmail.com");
+
+            return user;
+        }
+    };
+
 }

@@ -11,7 +11,6 @@ import com.ytpe4ko.springbootapp.service.PoiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,15 +45,15 @@ public class POIController {
 
     @DeleteMapping(path = "/poi/{id}")
     public ResponseEntity<POI> deletePOI(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        if (user.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(Role.ADMIN))) {
             try {
                 poiRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
     }
+
 
     @GetMapping(path = "/poi")
     public ArrayList<POI> getAllPoi() {
@@ -84,7 +83,7 @@ public class POIController {
     }
 
     @DeleteMapping("/poi/{id}/comments/{id1}")
-    public ResponseEntity deleteComment(@PathVariable Long id, @PathVariable Long id1, @AuthenticationPrincipal User user) {
+    public ResponseEntity deleteComment(@PathVariable Long id, @PathVariable Long id1) {
         return poiService.deleteComment(id, id1);
     }
 }
